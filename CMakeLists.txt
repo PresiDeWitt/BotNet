@@ -3,8 +3,10 @@ project(Mirai C)
 
 set(CMAKE_C_STANDARD 99)
 
-# Force rebuild
 include_directories(botnet_framework/include)
+
+# Add feature test macro to expose network definitions
+add_compile_definitions(_DEFAULT_SOURCE)
 
 # Explicitly list all source files to avoid any GLOB issues.
 set(SOURCES

