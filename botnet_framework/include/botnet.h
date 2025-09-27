@@ -9,6 +9,11 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+// Linux-specific include for prctl to fix compilation error
+#ifdef __linux__
+#include <sys/prctl.h>
+#endif
+
 // Core headers
 #include "config.h"
 #include "structures.h"
